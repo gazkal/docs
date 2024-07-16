@@ -3,6 +3,12 @@
     "info": {
         "contact": {}
     },
+    "servers": [
+    {
+      "url": "http://localhost:8080/api",
+      "description": "Local server"
+    }
+  ],
     "paths": {
         "/api/v1/adapters": {
             "get": {
