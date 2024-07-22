@@ -1,278 +1,1228 @@
 {
-    "components": {
-      "schemas": {
-        "AdaptCreateDTOBody": {
-          "additionalProperties": false,
-          "dependentRequired": {
-            "config": [
-              "type"
-            ]
+  "components": {
+    "schemas": {
+      "APIError": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/APIError.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
           },
-          "properties": {
-            "$schema": {
-              "description": "A URL to the JSON Schema for this object.",
-              "examples": [
-                "https://example.com/schemas/AdaptCreateDTOBody.json"
-              ],
-              "format": "uri",
-              "readOnly": true,
-              "type": "string"
-            },
-            "config": {
-              "$ref": "#/components/schemas/AdapterConfig"
-            },
-            "name": {
-              "type": "string"
-            },
-            "project_id": {
-              "type": "string"
-            },
-            "type": {
-              "enum": [
-                "cloud",
-                "scanner"
-              ],
-              "type": "string"
-            }
+          "error": {
+            "description": "Error message",
+            "examples": [
+              "Bad Request"
+            ],
+            "type": "string"
           },
-          "required": [
-            "project_id",
-            "name",
-            "type",
-            "config"
-          ],
-          "type": "object"
+          "message": {
+            "description": "Error message",
+            "examples": [
+              "Error retrieving organizations"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code",
+            "examples": [400],
+            "format": "int64",
+            "type": "integer"
+          }
         },
-        "AdapterConfig": {
-          "additionalProperties": false,
-          "properties": {
-            "cloud_config": {
-              "$ref": "#/components/schemas/CloudAdapter"
-            },
-            "tool_config": {
-              "$ref": "#/components/schemas/VulnerabilityAdapter"
-            }
+        "required": [
+          "status",
+          "error"
+        ],
+        "type": "object"
+      },
+      "APIResponseBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/APIResponseBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
           },
-          "type": "object"
+          "message": {
+            "description": "Success message",
+            "examples": [
+              "Successfully created organization"
+            ],
+            "type": "string"
+          }
         },
-        "CloudAdapter": {
-          "additionalProperties": false,
-          "properties": {
-            "api_key": {
-              "type": "string"
-            },
-            "provider": {
-              "type": "string"
-            },
-            "region": {
-              "type": "string"
-            },
-            "secret": {
-              "type": "string"
-            }
+        "required": [
+          "message"
+        ],
+        "type": "object"
+      },
+      "OrgCreateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OrgCreateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
           },
-          "required": [
-            "provider",
-            "api_key",
-            "secret",
-            "region"
-          ],
-          "type": "object"
+          "name": {
+            "description": "Name of the organization",
+            "examples": [
+              "Synaplink"
+            ],
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          }
         },
-        "ErrorDetail": {
-          "additionalProperties": false,
-          "properties": {
-            "location": {
-              "description": "Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'",
-              "type": "string"
-            },
-            "message": {
-              "description": "Error message text",
-              "type": "string"
-            },
-            "value": {
-              "description": "The value at the given location"
-            }
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "OrgGetAllBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OrgGetAllBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
           },
-          "type": "object"
-        },
-        "ErrorModel": {
-          "additionalProperties": false,
-          "properties": {
-            "$schema": {
-              "description": "A URL to the JSON Schema for this object.",
-              "examples": [
-                "https://example.com/schemas/ErrorModel.json"
-              ],
-              "format": "uri",
-              "readOnly": true,
-              "type": "string"
+          "data": {
+            "description": "List of organizations",
+            "items": {
+              "$ref": "#/components/schemas/Organization"
             },
-            "detail": {
-              "description": "A human-readable explanation specific to this occurrence of the problem.",
-              "examples": [
-                "Property foo is required but is missing."
-              ],
-              "type": "string"
-            },
-            "errors": {
-              "description": "Optional list of individual error details",
-              "items": {
-                "$ref": "#/components/schemas/ErrorDetail"
-              },
-              "type": "array"
-            },
-            "instance": {
-              "description": "A URI reference that identifies the specific occurrence of the problem.",
-              "examples": [
-                "https://example.com/error-log/abc123"
-              ],
-              "format": "uri",
-              "type": "string"
-            },
-            "status": {
-              "description": "HTTP status code",
-              "examples": [400],
-              "format": "int64",
-              "type": "integer"
-            },
-            "title": {
-              "description": "A short, human-readable summary of the problem type. This value should not change between occurrences of the error.",
-              "examples": [
-                "Bad Request"
-              ],
-              "type": "string"
-            },
-            "type": {
-              "default": "about:blank",
-              "description": "A URI reference to human-readable documentation for the error.",
-              "examples": [
-                "https://example.com/errors/example"
-              ],
-              "format": "uri",
-              "type": "string"
-            }
+            "type": "array"
           },
-          "type": "object"
+          "total": {
+            "description": "Total number of all objects, useful for pagination",
+            "examples": [100],
+            "format": "int64",
+            "type": "integer"
+          }
         },
-        "OrgDTOResoBody": {
-          "additionalProperties": false,
-          "properties": {
-            "$schema": {
-              "description": "A URL to the JSON Schema for this object.",
-              "examples": [
-                "https://example.com/schemas/OrgDTOResoBody.json"
-              ],
-              "format": "uri",
-              "readOnly": true,
+        "required": [
+          "data",
+          "total"
+        ],
+        "type": "object"
+      },
+      "OrgGetBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OrgGetBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Organization",
+            "description": "Organization object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "OrgUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OrgUpdateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the organization",
+            "examples": [
+              "Synaplink"
+            ],
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "Organization": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deleted_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "active",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "ProjCreateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ProjCreateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the project",
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "org_id": {
+            "description": "Parent organization UUID",
+            "maxLength": 36,
+            "minLength": 36,
+            "type": "string"
+          },
+          "out_scope": {
+            "description": "List of out of scope domains/keywords",
+            "examples": [
+              [
+                "synaplink.com",
+                "test.",
+                ".es"
+              ]
+            ],
+            "items": {
               "type": "string"
             },
-            "active": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "org_id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "ProjUpdateBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ProjUpdateBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the project",
+            "maxLength": 25,
+            "minLength": 1,
+            "type": "string"
+          },
+          "out_scope": {
+            "description": "List of out of scope domains/keywords",
+            "examples": [
+              [
+                "synaplink.com",
+                "test.",
+                ".es"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "Project": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deleted_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "org_id": {
+            "type": "string"
+          },
+          "out_scope": {
+            "additionalProperties": {
               "type": "boolean"
             },
-            "created_at": {
-              "format": "date-time",
-              "type": "string"
-            },
-            "deleted_at": {
-              "format": "date-time",
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "program": {
-              "type": "string"
-            },
-            "program_link": {
-              "type": "string"
-            },
-            "updated_at": {
-              "format": "date-time",
-              "type": "string"
-            }
+            "type": "object"
           },
-          "required": [
-            "id",
-            "name",
-            "active",
-            "created_at",
-            "updated_at"
-          ],
-          "type": "object"
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
         },
-        "VulnerabilityAdapter": {
-          "additionalProperties": false,
-          "properties": {
-            "api_key": {
-              "type": "string"
-            },
-            "tool_name": {
-              "type": "string"
-            },
-            "url": {
-              "type": "string"
-            }
+        "required": [
+          "id",
+          "org_id",
+          "name",
+          "active",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "ProjectGetAllBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ProjectGetAllBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
           },
-          "required": [
-            "tool_name",
-            "api_key",
-            "url"
-          ],
-          "type": "object"
-        }
+          "data": {
+            "description": "List of projects",
+            "items": {
+              "$ref": "#/components/schemas/Project"
+            },
+            "type": "array"
+          },
+          "total": {
+            "description": "Total number of all objects, useful for pagination",
+            "examples": [100],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "data",
+          "total"
+        ],
+        "type": "object"
+      },
+      "ProjectGetBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ProjectGetBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Project",
+            "description": "Project object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       }
     },
-    "info": {
-      "title": "My API",
-      "version": "1.0.0"
-    },
-    "openapi": "3.1.0",
-    "paths": {
-      "/api/v1/orgs": {
-        "post": {
-          "description": "Create a new organization",
-          "operationId": "create-organization",
-          "requestBody": {
+    "securitySchemes": {
+      "apiKey": {
+        "description": "API key authentication",
+        "in": "header",
+        "name": "X-Auth",
+        "type": "apiKey"
+      }
+    }
+  },
+  "info": {
+    "title": "Biscuit API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/orgs": {
+      "get": {
+        "description": "Retrieve organizations based on filters",
+        "operationId": "get-organizations",
+        "parameters": [
+          {
+            "description": "Name of the organization",
+            "example": "Synaplink",
+            "explode": false,
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "description": "Name of the organization",
+              "examples": [
+                "Synaplink"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Whether the objects are 'Active' or deleted within the DB",
+            "example": true,
+            "explode": false,
+            "in": "query",
+            "name": "active",
+            "schema": {
+              "default": true,
+              "description": "Whether the objects are 'Active' or deleted within the DB",
+              "examples": [true],
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Starting index for pagination",
+            "example": 1,
+            "explode": false,
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "default": 1,
+              "description": "Starting index for pagination",
+              "examples": [1],
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page for pagination",
+            "example": 20,
+            "explode": false,
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "default": 20,
+              "description": "Number of items per page for pagination",
+              "examples": [20],
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sort by field",
+            "example": "created_at",
+            "explode": false,
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "default": "created_at",
+              "description": "Sort by field",
+              "examples": [
+                "created_at"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort order: ASC or DESC",
+            "example": "DESC",
+            "explode": false,
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "default": "DESC",
+              "description": "Sort order: ASC or DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "examples": [
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AdaptCreateDTOBody"
+                  "$ref": "#/components/schemas/OrgGetAllBody"
                 }
               }
             },
-            "required": true
+            "description": "OK"
           },
-          "responses": {
-            "200": {
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/OrgDTOResoBody"
-                  }
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
                 }
-              },
-              "description": "OK"
+              }
             },
-            "default": {
-              "content": {
-                "application/problem+json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ErrorModel"
-                  }
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
                 }
-              },
-              "description": "Error"
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Retrieve organizations",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "post": {
+        "description": "Create a new organization",
+        "operationId": "create-organization",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrgCreateBody"
+              }
             }
           },
-          "summary": "Create a new organization",
-          "tags": [
-            "organizations"
-          ]
-        }
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Create a new organization",
+        "tags": [
+          "Organizations"
+        ]
+      }
+    },
+    "/api/v1/orgs/{id}": {
+      "get": {
+        "description": "Retrieve organization by ID",
+        "operationId": "get-organization",
+        "parameters": [
+          {
+            "description": "UUID of the object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "UUID of the object",
+              "maxLength": 36,
+              "minLength": 36,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgGetBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Retrieve organization",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "put": {
+        "description": "Update an organization",
+        "operationId": "update-organization",
+        "parameters": [
+          {
+            "description": "UUID of the object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "UUID of the object",
+              "maxLength": 36,
+              "minLength": 36,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrgUpdateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Update an organization",
+        "tags": [
+          "Organizations"
+        ]
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "description": "Retrieve projects based on filters",
+        "operationId": "get-projects",
+        "parameters": [
+          {
+            "description": "Name of the project",
+            "example": "Synaplink September",
+            "explode": false,
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "description": "Name of the project",
+              "examples": [
+                "Synaplink September"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Parent organization UUID",
+            "example": "f7b3b3b3-4b3b-4b3b-4b3b-4b3b3b3b3b3b",
+            "explode": false,
+            "in": "query",
+            "name": "org_id",
+            "schema": {
+              "description": "Parent organization UUID",
+              "examples": [
+                "f7b3b3b3-4b3b-4b3b-4b3b-4b3b3b3b3b3b"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Whether the objects are 'Active' or deleted within the DB",
+            "example": true,
+            "explode": false,
+            "in": "query",
+            "name": "active",
+            "schema": {
+              "default": true,
+              "description": "Whether the objects are 'Active' or deleted within the DB",
+              "examples": [true],
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Starting index for pagination",
+            "example": 1,
+            "explode": false,
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "default": 1,
+              "description": "Starting index for pagination",
+              "examples": [1],
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Number of items per page for pagination",
+            "example": 20,
+            "explode": false,
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "default": 20,
+              "description": "Number of items per page for pagination",
+              "examples": [20],
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sort by field",
+            "example": "created_at",
+            "explode": false,
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "default": "created_at",
+              "description": "Sort by field",
+              "examples": [
+                "created_at"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Sort order: ASC or DESC",
+            "example": "DESC",
+            "explode": false,
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "default": "DESC",
+              "description": "Sort order: ASC or DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "examples": [
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectGetAllBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Retrieve projects",
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "description": "Create a new project",
+        "operationId": "create-project",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Create a new project",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/api/v1/projects/{id}": {
+      "get": {
+        "description": "Retrieve project by ID",
+        "operationId": "get-project",
+        "parameters": [
+          {
+            "description": "UUID of the object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "UUID of the object",
+              "maxLength": 36,
+              "minLength": 36,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectGetBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Retrieve project",
+        "tags": [
+          "Projects"
+        ]
+      },
+      "put": {
+        "description": "Update a project",
+        "operationId": "update-project",
+        "parameters": [
+          {
+            "description": "UUID of the object",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "UUID of the object",
+              "maxLength": 36,
+              "minLength": 36,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjUpdateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "Update a project",
+        "tags": [
+          "Projects"
+        ]
       }
     }
   }
+}
