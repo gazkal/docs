@@ -77,7 +77,19 @@
     {
       "group": "Organizations",
       "pages": [
-        "api-reference/organizations/create-a-new-organization"
+        "api-reference/organizations/create-a-new-organization",
+        "api-reference/organizations/retrieve-organization",
+        "api-reference/organizations/retrieve-organizations",
+        "api-reference/organizations/update-an-organization"
+      ]
+    },
+    {
+      "group": "Projects",
+      "pages": [
+        "api-reference/organizations/create-a-new-project",
+        "api-reference/organizations/retrieve-projects",
+        "api-reference/organizations/retrieve-project",
+        "api-reference/organizations/update-a-project"
       ]
     }
   ],
