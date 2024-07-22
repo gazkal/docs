@@ -86,10 +86,10 @@
     {
       "group": "Projects",
       "pages": [
-        "api-reference/organizations/create-a-new-project",
-        "api-reference/organizations/retrieve-projects",
-        "api-reference/organizations/retrieve-project",
-        "api-reference/organizations/update-a-project"
+        "api-reference/projects/create-a-new-project",
+        "api-reference/projects/retrieve-projects",
+        "api-reference/projects/retrieve-project",
+        "api-reference/projects/update-a-project"
       ]
     }
   ],
